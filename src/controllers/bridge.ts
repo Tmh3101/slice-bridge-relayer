@@ -28,7 +28,7 @@ const mint = async (c: Context) => {
             return c.json({ error: "Invalid request data", details: parsed.error }, 400);
         }
         const result = await bridgeService.mint(parsed.data);
-        return c.json(result);
+        return c.json(new SuccessResponse(200, "Minting initiated successfully", result));
     } catch (error) {
         if (error instanceof AppError) {
             return c.json({ code: error.code, message: error.message }, error.status);

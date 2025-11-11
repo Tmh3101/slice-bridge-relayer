@@ -6,7 +6,8 @@ import { MintRequest } from "@/schemas";
 import { db, bridgeJobs } from "@/db";
 import { lensPublic, lensWallet } from "@/clients/lensClient";
 import { BRIDGE_MINTER_ABI } from "@/abi";
-import { InternalServerError, NotFoundError } from "@/lib/custorm-exceptions";
+import { InternalServerError, NotFoundError, BadRequestError } from "@/lib/custorm-exceptions";
+import { BridgeJobStatus } from "@/lib/constants/bridgeJobStatus";
 
 const getBridgeStatus = async (id: string) => {
     try {
@@ -35,7 +36,7 @@ const mint = async (mintData: MintRequest) => {
             amount: amount.toString(), // hoặc bigint column
             srcTxHash: srcTxHash,
             srcNonce: srcNonce,
-            status: "pending",
+            status: BridgeJobStatus.PENDING,
         }).returning();
 
         jobResult = job;
@@ -59,28 +60,42 @@ const mint = async (mintData: MintRequest) => {
 
         await db.update(bridgeJobs).set({
             dstTxHash: hash,
-            status: "relayed"
+            status: BridgeJobStatus.RELAYED
         }).where(eq(bridgeJobs.id, job.id));
 
         const receipt = await lensPublic.waitForTransactionReceipt({ hash });
 
+        if (receipt.status !== "success") {
+            throw new Error("Transaction failed");
+        }
+
         await db.update(bridgeJobs).set({
-            status: receipt.status === "success" ? "completed" : "failed"
+            status: BridgeJobStatus.COMPLETED,
         }).where(eq(bridgeJobs.id, job.id));
 
         return {
-            bridgeJob: job,
+            id: job.id,
+            direction: job.direction,
+            srcChainId: job.srcChainId,
+            dstChainId: job.dstChainId,
+            tokenAddress: job.tokenAddress,
+            to: job.to,
+            amount: job.amount,
             txHash: hash
         };
     } catch (e: any) {
         console.error("Error during minting process:", e);
         if (jobResult) {
             await db.update(bridgeJobs).set({
-                status: "failed",
+                status: BridgeJobStatus.FAILED,
                 error: String(e?.message ?? e)
             }).where(eq(bridgeJobs.id, jobResult.id));
         }
-        throw new HTTPException(500, { message: "Internal Server Error" } );
+
+        if (e.message && e.message.includes("Execution reverted with reason: processed")) {
+            throw new BadRequestError("This bridge request has already been processed.");
+        }
+        throw new InternalServerError();
     }
 };
 

@@ -10,6 +10,12 @@ export class AppError extends HTTPException {
     }
 }
 
+export class BadRequestError extends AppError {
+    constructor(message = 'Bad request') {
+        super(400, ErrorCode.BAD_REQUEST, message)
+    }
+}
+
 export class NotFoundError extends AppError {
     constructor(message = 'Resource not found') {
         super(404, ErrorCode.NOT_FOUND, message)
