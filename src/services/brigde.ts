@@ -1,21 +1,23 @@
 import { eq } from "drizzle-orm";
 import { encodeFunctionData } from "viem";
+import { HTTPException } from 'hono/http-exception'
 import { envConfig } from "@/env";
 import { MintRequest } from "@/schemas";
 import { db, bridgeJobs } from "@/db";
 import { lensPublic, lensWallet } from "@/clients/lensClient";
 import { BRIDGE_MINTER_ABI } from "@/abi";
+import { InternalServerError, NotFoundError } from "@/lib/custorm-exceptions";
 
 const getBridgeStatus = async (id: string) => {
     try {
         const rows = await db.select().from(bridgeJobs).where(eq(bridgeJobs.id, id));
         if (rows.length === 0) {
-            throw new Error("Bridge job not found");
+            throw new NotFoundError("Bridge job not found");
         }
         return rows[0];
     } catch (error) {
         console.error("Error getting bridge status:", error);
-        throw error;
+        throw new InternalServerError();
     }
 };
 
@@ -67,9 +69,8 @@ const mint = async (mintData: MintRequest) => {
         }).where(eq(bridgeJobs.id, job.id));
 
         return {
-            jobId: job.id,
-            tx: hash,
-            status: receipt.status
+            bridgeJob: job,
+            txHash: hash
         };
     } catch (e: any) {
         console.error("Error during minting process:", e);
@@ -79,7 +80,7 @@ const mint = async (mintData: MintRequest) => {
                 error: String(e?.message ?? e)
             }).where(eq(bridgeJobs.id, jobResult.id));
         }
-        throw e;
+        throw new HTTPException(500, { message: "Internal Server Error" } );
     }
 };
 

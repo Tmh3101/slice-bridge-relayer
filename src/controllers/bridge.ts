@@ -1,6 +1,8 @@
 import type { Context } from "hono";
 import { MintRequestSchema } from "@/schemas";
 import bridgeService from "../services/brigde";
+import { AppError } from "@/lib/custorm-exceptions";
+import { SuccessResponse } from "@/lib/custorm-response";
 
 const getBridgeStatus = async (c: Context) => {
     try {
@@ -9,11 +11,11 @@ const getBridgeStatus = async (c: Context) => {
             return c.json({ error: "Missing bridge job ID" }, 400);
         }
         const result = await bridgeService.getBridgeStatus(id);
-        return c.json({
-            status: "success",
-            data: result
-        });
+        return c.json(new SuccessResponse(200, "Bridge job fetched successfully", result));
     } catch (error) {
+        if (error instanceof AppError) {
+            return c.json({ code: error.code, message: error.message }, error.status);
+        }
         return c.json({ error: "Failed to fetch bridge status" }, 500);
     }
 };
@@ -28,7 +30,10 @@ const mint = async (c: Context) => {
         const result = await bridgeService.mint(parsed.data);
         return c.json(result);
     } catch (error) {
-        return c.json({ error: "Invalid request body" }, 400);
+        if (error instanceof AppError) {
+            return c.json({ code: error.code, message: error.message }, error.status);
+        }
+        return c.json({ error: "Minting failed" }, 500);
     }
 }
 
