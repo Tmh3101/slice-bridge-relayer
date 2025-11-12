@@ -1,6 +1,7 @@
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { bridgeJobs } from "./schemas/bridgeJob";
+import { checkpoints } from "./schemas/checkpoints";
 
 const client = postgres(
     process.env.DATABASE_URL!,
@@ -11,5 +12,6 @@ const client = postgres(
 
 export const db = drizzle(client);
 export {
-    bridgeJobs
+    bridgeJobs,
+    checkpoints
 };

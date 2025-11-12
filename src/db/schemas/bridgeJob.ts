@@ -7,6 +7,7 @@ export const bridgeJobs = bridgeDB.table("bridge_jobs", {
   srcChainId: bigint("src_chain_id", { mode: "number" }).notNull(),
   dstChainId: bigint("dst_chain_id", { mode: "number" }).notNull(),
   tokenAddress: text("token_address").notNull(),
+  from: text("from_address"),
   to: text("to_address").notNull(),
   amount: numeric("amount", { precision: 78, scale: 0 }).notNull(),
   srcTxHash: text("src_tx_hash"),

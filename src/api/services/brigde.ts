@@ -3,9 +3,13 @@ import { encodeFunctionData } from "viem";
 import { envConfig } from "@/core/env";
 import { MintRequest, UnlockRequest } from "@/lib/types/requests";
 import { db, bridgeJobs } from "@/db";
-import { lensPublic, lensWallet } from "@/clients/lensClient";
-import { bscPublic, bscWallet } from "@/clients/bscClient";
-import { BRIDGE_MINTER_ABI, BRIDGE_GATEWAY_BSC_ABI  } from "@/abi";
+import {
+    lensPublicClient,
+    lensWalletClient,
+    bscPublicClient,
+    bscWalletClient
+} from "@/clients";
+import { BRIDGE_MINTER_LENS_ABI, BRIDGE_GATEWAY_BSC_ABI  } from "@/abis";
 import { InternalServerError, NotFoundError, BadRequestError } from "@/lib/custorm-exceptions";
 import { BridgeJobStatus } from "@/lib/constants/bridgeJobStatus";
 
@@ -45,7 +49,7 @@ const mint = async (mintData: MintRequest) => {
         jobResult = job;
 
         const data = encodeFunctionData({
-            abi: BRIDGE_MINTER_ABI as any,
+            abi: BRIDGE_MINTER_LENS_ABI,
             functionName: "mintTo",
             args: [
                 to as `0x${string}`,
@@ -56,7 +60,7 @@ const mint = async (mintData: MintRequest) => {
             ],
         });
 
-        const hash = await lensWallet.sendTransaction({
+        const hash = await lensWalletClient.sendTransaction({
             to: envConfig.LENS_MINTER_ADDRESS as `0x${string}`,
             data
         });
@@ -66,7 +70,7 @@ const mint = async (mintData: MintRequest) => {
             status: BridgeJobStatus.RELAYED
         }).where(eq(bridgeJobs.id, job.id));
 
-        const receipt = await lensPublic.waitForTransactionReceipt({ hash });
+        const receipt = await lensPublicClient.waitForTransactionReceipt({ hash });
 
         if (receipt.status !== "success") {
             throw new Error("Transaction failed");
@@ -132,7 +136,7 @@ const unlock = async (unlockData: UnlockRequest) => {
             ],
         });
 
-        const hash = await bscWallet.sendTransaction({
+        const hash = await bscWalletClient.sendTransaction({
             to: envConfig.BSC_POOL_ADDRESS as `0x${string}`,
             data
         });
@@ -142,7 +146,7 @@ const unlock = async (unlockData: UnlockRequest) => {
             status: BridgeJobStatus.RELAYED
         }).where(eq(bridgeJobs.id, job.id));
 
-        const receipt = await bscPublic.waitForTransactionReceipt({ hash });
+        const receipt = await bscPublicClient.waitForTransactionReceipt({ hash });
 
         if (receipt.status !== "success") {
             throw new Error("Transaction failed");
