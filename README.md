@@ -1,4 +1,4 @@
-# 🌉 Slice Bridge Service
+# Slice Bridge Service
 
 A robust cross-chain bridge service enabling seamless token transfers between BSC (Binance Smart Chain) and Lens Protocol networks. Built with TypeScript, Hono, Drizzle ORM, and BullMQ.
 
