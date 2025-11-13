@@ -34,6 +34,8 @@ const startServer = async () => {
   const app = new Hono()
   app.use(logger())
   app.use(prettyJSON())
+
+  app.get('/', (c) => c.json({ message: 'Slice Bridge Relayer is running' }))
   app.route('/api', apiRoutes)
 
   const port = Number(process.env.PORT ?? 8787)
