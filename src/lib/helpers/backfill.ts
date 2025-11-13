@@ -1,4 +1,5 @@
 import type { PublicClient, Log, AbiEvent } from "viem";
+import { logger } from "@/core/logger";
 
 type BackfillOpts = {
     client: PublicClient;
@@ -38,7 +39,7 @@ export async function backfillInWindows({
             }
         } catch (err) {
             // bỏ qua lỗi để tiếp tục backfill
-            console.log(`Backfill from block ${start} to ${curEnd}, skipping`);
+            logger.warn(`Backfill from block ${start} to ${curEnd}, skipping`);
         }
 
         start = curEnd + 100_000n;

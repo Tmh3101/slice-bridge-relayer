@@ -18,12 +18,12 @@ serve({ fetch: app.fetch, port }, (info) => {
 })
 
 lockedListenWorker().catch((e) => {
-  custormLogger.error('LockedWorker crashed:', e);
+  custormLogger.fatal({ detail: e }, 'LockedWorker crashed');
   process.exit(1);
 });
 
 burnedListenWorker().catch((e) => {
-  custormLogger.error('BurnedWorker crashed:', e);
+  custormLogger.fatal({ detail: e }, 'BurnedWorker crashed');
   process.exit(1);
 });
 
