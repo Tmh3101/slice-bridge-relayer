@@ -1,12 +1,19 @@
 import { InMemoryQueue } from './memory'
-// import { BullMqAdapter } from './bullmq'
+import { BullMqAdapter } from './bullmq'
 import { QueueAdapter } from './types'
 import { handleLocked, handleBurned } from '@/processor/bridgeProcessor'
+import { envConfig } from '@/core/env'
+import { logger } from '@/core/logger'
 
 export function createQueue(): QueueAdapter {
-//   if (process.env.REDIS_URL) {
-//     return new BullMqAdapter(process.env.REDIS_URL, process.env.QUEUE_PREFIX ?? 'slice-bridge')
-//   }
+  if (
+    envConfig.REDIS_URL && envConfig.REDIS_URL !== 'redis://localhost:6379'
+    || process.env.USE_REDIS === 'true'
+  ) {
+    logger.info(`Using BullMQ with Redis: ${envConfig.REDIS_URL}`)
+    return new BullMqAdapter(envConfig.REDIS_URL, envConfig.QUEUE_PREFIX)
+  }
+  logger.info('Using InMemory queue (queue fallback)')
   return new InMemoryQueue()
 }
 

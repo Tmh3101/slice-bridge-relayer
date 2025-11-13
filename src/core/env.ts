@@ -29,4 +29,7 @@ export const envConfig = {
 
   RELAYER_PK: process.env.RELAYER_PK!,
   DATABASE_URL: process.env.DATABASE_URL!,
+
+  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
+  QUEUE_PREFIX: process.env.QUEUE_PREFIX || 'slice-bridge',
 };
