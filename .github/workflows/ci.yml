@@ -1,0 +1,44 @@
+# Tên của workflow
+name: Node.js CI
+
+# Kích hoạt workflow này khi nào?
+on:
+  # Chạy khi push lên nhánh main
+  push:
+    branches: [ main ]
+  # Chạy khi có Pull Request (PR) nhắm vào nhánh main
+  pull_request:
+    branches: [ main ]
+
+# Các "công việc" (jobs) sẽ chạy
+jobs:
+  # Đặt tên job là "build"
+  build:
+    # Chạy trên máy ảo Ubuntu mới nhất
+    runs-on: ubuntu-latest
+
+    # Các bước thực thi
+    steps:
+      # 1. Lấy code từ repo về
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Cài đặt pnpm (vì bạn dùng pnpm)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      # 3. Cài đặt Node.js (phiên bản 20 là ổn định)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm' # Bật cache cho pnpm
+
+      # 4. Cài đặt dependencies
+      - name: Install dependencies
+        run: pnpm install
+
+      # 5. Chạy lệnh build (quan trọng nhất)
+      # Lệnh này sẽ kiểm tra lỗi TypeScript và biên dịch code
+      - name: Run build
+        run: pnpm run build
