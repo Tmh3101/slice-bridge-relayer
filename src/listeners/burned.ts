@@ -59,6 +59,10 @@ export async function burnedListener() {
       }
     },
     onError: (err) => {
+      if (err?.message?.includes("Missing or invalid parameters")) {
+        logger.warn("[burned-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
+        return;
+      }
       logger.error("[burned-listener] error:\n" + err?.message || err);
       // Nếu dùng HTTP polling, có thể thêm backoff và tự tăng fromBlock dần
     }
