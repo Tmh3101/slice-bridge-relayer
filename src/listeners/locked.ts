@@ -55,7 +55,7 @@ export async function lockedListener() {
     },
     onError: (err) => {
       if (err?.message?.includes("Missing or invalid parameters")) return;
-      logger.error("[locked-listener] error:" + err?.message || err);
+      logger.error("[locked-listener] error:\n" + err?.message || err);
     },
   });
 }

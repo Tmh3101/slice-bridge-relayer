@@ -59,7 +59,7 @@ export async function burnedListener() {
       }
     },
     onError: (err) => {
-      logger.error("[burned-listener] error:" + err?.message || err);
+      logger.error("[burned-listener] error:\n" + err?.message || err);
       // Nếu dùng HTTP polling, có thể thêm backoff và tự tăng fromBlock dần
     }
   });
