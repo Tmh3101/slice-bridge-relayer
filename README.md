@@ -45,7 +45,7 @@ A robust cross-chain bridge service enabling seamless token transfers between BS
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/goby35/slice-bridge-relayer.git
+   git clone https://github.com/tmh3101/slice-bridge-relayer.git
    cd slice-bridge-relayer
    ```
 
