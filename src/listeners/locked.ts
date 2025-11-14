@@ -43,10 +43,7 @@ export async function lockedListener() {
     eventName: EventName.LOCKED,
     fromBlock: latest, // từ block mới nhất
     onLogs: async (logs) => {
-      console.log("Received burned logs:", logs.length);
       const tip = await bscPublicClient.getBlockNumber();
-      console.log("Current tip block number:", tip);
-      console.log("logs:", logs);
       for (const l of logs) {
         await handleLockedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
