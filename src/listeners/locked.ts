@@ -37,8 +37,6 @@ export async function lockedListener() {
     },
   });
 
-  console.log("locked blocknumber latest:", latest);
-
   return bscPublicClient.watchContractEvent({
     address: pool,
     abi: BRIDGE_GATEWAY_BSC_ABI,
@@ -56,7 +54,7 @@ export async function lockedListener() {
     },
     onError: (err) => {
       if (err?.message?.includes("Missing or invalid parameters")) {
-        logger.warn({ detail: err.cause }, "[locked-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
+        // logger.warn({ detail: err.cause }, "[locked-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
         return;
       }
       logger.error({ detail: err.message }, "[locked-listener] error");
