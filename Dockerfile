@@ -19,8 +19,8 @@ COPY . .
 # Build the application
 RUN pnpm run build
 
-# ===== Production stage =====
-FROM node:20-alpine AS production
+# ===== Stage =====
+FROM node:20-alpine AS application
 
 # Install pnpm
 RUN npm install -g pnpm

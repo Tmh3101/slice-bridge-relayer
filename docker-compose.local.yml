@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
+      target: application
     container_name: slice-bridge-app
     restart: unless-stopped
     environment:
