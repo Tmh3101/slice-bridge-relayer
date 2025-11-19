@@ -32,7 +32,6 @@ const estimateFee = async (data: {
             estimatedFee: totalFee.toString()
         };
     } catch (error) {
-        console.error("Error estimating fee:", error);
         if (error instanceof BadRequestError) {
             throw error;
         }
