@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { Hono } from 'hono'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
+import { cors } from 'hono/cors'
 import { serve } from '@hono/node-server'
 import { logger as custormLogger } from "@/core/logger";
 import { lockedListenWorker, burnedListenWorker } from './workers'
@@ -32,6 +33,7 @@ const startServer = async () => {
   });
 
   const app = new Hono()
+  app.use(cors())
   app.use(logger())
   app.use(prettyJSON())
 
