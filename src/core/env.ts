@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === "production") {
 
 export const envConfig = {
   NODE_ENV: process.env.NODE_ENV || "development",
+  IS_MAINNET: process.env.NODE_ENV === "production",
 
   LENS_RPC_HTTP: process.env.LENS_RPC_HTTP ?? 'https://rpc.testnet.lens.xyz',
   LENS_RPC_WS: process.env.LENS_RPC_WS || undefined,
