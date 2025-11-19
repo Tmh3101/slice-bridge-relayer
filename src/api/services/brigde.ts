@@ -27,9 +27,11 @@ const estimateFee = async (data: {
             throw new BadRequestError(`Amount must be at least ${MIN_TOKEN_PER_TX} tokens`);
         }
         const totalFee = (data.amount * FEE_PERCENTAGE) / 100;
+        const totalReceiveAmount = data.amount - totalFee;
         return {
             feePercentage: FEE_PERCENTAGE.toString(),
-            estimatedFee: totalFee.toString()
+            estimatedFee: totalFee.toString(),
+            totalReceiveAmount: totalReceiveAmount.toString()
         };
     } catch (error) {
         if (error instanceof BadRequestError) {
