@@ -22,11 +22,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: application
     container_name: slice-bridge-app
     restart: unless-stopped
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
       PORT: 8787
       REDIS_URL: redis://redis:6379
       USE_REDIS: "true"

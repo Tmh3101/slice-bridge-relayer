@@ -22,11 +22,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: application
+      target: production
     container_name: slice-bridge-app
     restart: unless-stopped
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 8787
       REDIS_URL: redis://redis:6379
       USE_REDIS: "true"
@@ -38,14 +38,14 @@ services:
       # Blockchain configuration
       LENS_RPC_HTTP: ${LENS_RPC_HTTP}
       LENS_CHAIN_ID: ${LENS_CHAIN_ID}
-      LENS_START_BLOCK: ${LENS_START_BLOCK:-4000000}
+      LENS_START_BLOCK: ${LENS_START_BLOCK:-5000000}
       LENS_MINTER_ADDRESS: ${LENS_MINTER_ADDRESS}
       LENS_WRAPPED_ADDRESS: ${LENS_WRAPPED_ADDRESS}
       
       BSC_RPC_HTTP: ${BSC_RPC_HTTP}
       BSC_RPC_WS: ${BSC_RPC_WS}
       BSC_CHAIN_ID: ${BSC_CHAIN_ID}
-      BSC_START_BLOCK: ${BSC_START_BLOCK:-40000}
+      BSC_START_BLOCK: ${BSC_START_BLOCK:-68000000}
       BSC_POOL_ADDRESS: ${BSC_POOL_ADDRESS}
       BSC_TOKEN_ADDRESS: ${BSC_TOKEN_ADDRESS}
       
@@ -64,10 +64,10 @@ services:
       - slice-bridge-network
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8787/api/health"]
-      interval: 30s
+      interval: 600s # 10 minutes
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s # 1 minute
 
 volumes:
   redis_data:
