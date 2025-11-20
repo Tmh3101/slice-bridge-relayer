@@ -1,5 +1,5 @@
 import { defineChain } from "viem";
-import { envConfig } from "@/core/env";
+import { BSC_TESTNET_RPCS, BSC_MAINNET_RPCS } from "@/core/rpcs";
 
 export const bscTestnet = defineChain({
   id: 97,
@@ -11,7 +11,22 @@ export const bscTestnet = defineChain({
   },
   rpcUrls: {
     default: {
-        http: [envConfig.BSC_RPC_HTTP!]
+      http: BSC_TESTNET_RPCS
+    }
+  },
+});
+
+export const bscMainnet = defineChain({
+  id: 56,
+  name: "BSC Mainnet",
+  nativeCurrency: {
+    name: "BNB",
+    symbol: "BNB",
+    decimals: 18
+  },
+  rpcUrls: {
+    default: {
+      http: BSC_MAINNET_RPCS
     }
   },
 });
