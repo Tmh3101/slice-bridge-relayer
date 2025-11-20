@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === "production") {
 export const envConfig = {
   NODE_ENV: process.env.NODE_ENV || "development",
   IS_MAINNET: process.env.NODE_ENV === "production",
+  LOG_LEVEL: process.env.LOG_LEVEL || "debug",
 
   LENS_CHAIN_ID: process.env.NODE_ENV === "production" ? 232 : 37111,
   LENS_START_BLOCK: Number(process.env.LENS_START_BLOCK || 0),

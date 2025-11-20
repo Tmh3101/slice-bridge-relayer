@@ -7,6 +7,7 @@ import {
   BSC_MAINNET_RPCS,
   BSC_TESTNET_RPCS
 } from "@/core/rpcs";
+import { envConfig } from "@/core/env";
 
 const BATCH_SIZE = 10;
 
@@ -16,13 +17,9 @@ const getRpcsByChainId = (chainId: number): string[] => {
 
     switch (chainId) {
         case lensChain.id:
-            return LENS_MAINNET_RPCS;
+            return envConfig.IS_MAINNET ? LENS_MAINNET_RPCS : LENS_TESTNET_RPCS;
         case bscChain.id:
-            return BSC_MAINNET_RPCS;
-        case lensChain.id:
-            return LENS_TESTNET_RPCS;
-        case bscChain.id:
-            return BSC_TESTNET_RPCS;
+            return envConfig.IS_MAINNET ? BSC_MAINNET_RPCS : BSC_TESTNET_RPCS;
         default:
             return [];
     }

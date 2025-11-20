@@ -5,20 +5,16 @@ import {
   BSC_MAINNET_WS,
   BSC_TESTNET_WS
 } from "@/core/rpcs";
-
-const BATCH_SIZE = 10;
+import { envConfig } from "@/core/env";
 
 const getWssByChainId = (chainId: number): string[] => {
     const bscChain = getBsc();
 
-    switch (chainId) {
-        case bscChain.id:
-            return BSC_MAINNET_WS;
-        case bscChain.id:
-            return BSC_TESTNET_WS;
-        default:
-            return [];
+    if (chainId === bscChain.id) {
+        return envConfig.IS_MAINNET ? BSC_MAINNET_WS : BSC_TESTNET_WS;
     }
+
+    return [];
 }
 
 const getWs = (chainId: number): FallbackTransport => {
