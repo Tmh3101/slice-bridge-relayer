@@ -283,11 +283,9 @@ docker-compose logs -f  # Monitor all services
 | `DATABASE_URL` | PostgreSQL connection string | - | Yes |
 | `REDIS_URL` | Redis connection string | `redis://localhost:6379` | No |
 | `USE_REDIS` | Force Redis usage | `false` | No |
-| `LENS_RPC_HTTP` | Lens network RPC endpoint | - | Yes |
 | `LENS_CHAIN_ID` | Lens chain ID | `37111` | No |
 | `LENS_MINTER_ADDRESS` | Bridge minter contract | - | Yes |
 | `LENS_WRAPPED_ADDRESS` | Wrapped token contract | - | Yes |
-| `BSC_RPC_HTTP` | BSC network RPC endpoint | - | Yes |
 | `BSC_CHAIN_ID` | BSC chain ID | `97` | No |
 | `BSC_POOL_ADDRESS` | Bridge pool contract | - | Yes |
 | `BSC_TOKEN_ADDRESS` | Token contract on BSC | - | Yes |

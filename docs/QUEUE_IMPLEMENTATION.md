@@ -84,9 +84,7 @@ QUEUE_PREFIX=slice-bridge
 DATABASE_URL=postgresql://username:password@host:port/dbname
 
 # Blockchain Configuration
-LENS_RPC_HTTP=https://rpc.testnet.lens.xyz
 LENS_CHAIN_ID=37111
-BSC_RPC_HTTP=https://data-seed-prebsc-1-s1.binance.org:8545
 BSC_CHAIN_ID=97
 
 # Relayer
