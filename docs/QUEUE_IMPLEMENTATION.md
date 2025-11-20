@@ -83,10 +83,6 @@ QUEUE_PREFIX=slice-bridge
 # Database
 DATABASE_URL=postgresql://username:password@host:port/dbname
 
-# Blockchain Configuration
-LENS_CHAIN_ID=37111
-BSC_CHAIN_ID=97
-
 # Relayer
 RELAYER_PK=your_private_key_here
 ```

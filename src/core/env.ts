@@ -10,17 +10,13 @@ export const envConfig = {
   NODE_ENV: process.env.NODE_ENV || "development",
   IS_MAINNET: process.env.NODE_ENV === "production",
 
-  LENS_RPC_HTTP: process.env.LENS_RPC_HTTP ?? 'https://rpc.testnet.lens.xyz',
-  LENS_RPC_WS: process.env.LENS_RPC_WS || undefined,
-  LENS_CHAIN_ID: Number(process.env.LENS_CHAIN_ID || 37111),
+  LENS_CHAIN_ID: process.env.NODE_ENV === "production" ? 232 : 37111,
   LENS_START_BLOCK: Number(process.env.LENS_START_BLOCK || 0),
 
   LENS_MINTER_ADDRESS: process.env.LENS_MINTER_ADDRESS!,
   LENS_WRAPPED_ADDRESS: process.env.LENS_WRAPPED_ADDRESS!,
 
-  BSC_RPC_HTTP: process.env.BSC_RPC_HTTP! || "https://bsc-dataseed.binance.org/",
-  BSC_RPC_WS: process.env.BSC_RPC_WS! || "wss://bsc-ws-node.nariox.org:443",
-  BSC_CHAIN_ID: Number(process.env.BSC_CHAIN_ID || 97),
+  BSC_CHAIN_ID: process.env.NODE_ENV === "production" ? 56 : 97,
   BSC_START_BLOCK: Number(process.env.BSC_START_BLOCK || 0),
 
   BSC_TOKEN_ADDRESS: process.env.BSC_TOKEN_ADDRESS!,
