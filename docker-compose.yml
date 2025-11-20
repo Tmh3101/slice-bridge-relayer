@@ -28,6 +28,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: 8787
+      LOG_LEVEL: ${LOG_LEVEL:-fatal}
       REDIS_URL: redis://redis:6379
       USE_REDIS: "true"
       QUEUE_PREFIX: slice-bridge
@@ -64,10 +65,10 @@ services:
       - slice-bridge-network
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8787/api/health"]
-      interval: 30s
+      interval: 600s # 10 minutes
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s # 1 minute
 
 volumes:
   redis_data:
