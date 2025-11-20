@@ -51,7 +51,7 @@ export async function burnedListener() {
     },
     onError: (err) => {
       if (err?.message?.includes("Invalid parameters were provided to the RPC method")) {
-        // logger.warn({ detail: err.cause }, "[burned-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
+        logger.warn({ detail: err.cause }, "[burned-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
         return;
       }
       logger.error({ detail: err.message }, "[burned-listener] error");
