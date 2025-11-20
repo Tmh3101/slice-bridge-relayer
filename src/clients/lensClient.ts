@@ -1,16 +1,18 @@
-import { createPublicClient, createWalletClient, http } from "viem";
+import { createPublicClient, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-// import { createSmartPublicClient } from "@/clients/factory/smartClient";
-import { lensTestnet } from "@/chains/lens";
 import { envConfig } from "@/core/env";
+import { getLensChain } from "@/chains";
+import getRpc from "@/lib/helpers/getRpc";
+
+const lensChain = getLensChain();
 
 export const lensPublicClient = createPublicClient({
-  chain: lensTestnet,
-  transport: http(process.env.LENS_RPC_HTTP!),
+  chain: lensChain,
+  transport: getRpc(lensChain.id),
 });
 
 export const lensWalletClient = createWalletClient({
-  chain: lensTestnet,
+  chain: lensChain,
   account: privateKeyToAccount(envConfig.RELAYER_PK as `0x${string}`),
-  transport: http(envConfig.LENS_RPC_HTTP!)
+  transport: getRpc(lensChain.id)
 });

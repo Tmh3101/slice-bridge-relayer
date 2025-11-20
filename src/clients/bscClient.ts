@@ -1,16 +1,15 @@
 import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { createSmartPublicClient } from "@/clients/factory/smartClient";
-import { bscTestnet } from "@/chains/bsc";
 import { envConfig } from "@/core/env";
+import { getBsc } from "@/chains";
+import getRpc from "@/lib/helpers/getRpc";
 
-export const bscPublicClient = createSmartPublicClient(bscTestnet, {
-  httpUrl: envConfig.BSC_RPC_HTTP!,
-  wsUrl: envConfig.BSC_RPC_WS, // dùng được WS
-});
+const bscChain = getBsc();
 
+export const bscPublicClient = createSmartPublicClient(bscChain);
 export const bscWalletClient = createWalletClient({
-  chain: bscTestnet,
+  chain: bscChain,
   account: privateKeyToAccount(envConfig.RELAYER_PK as `0x${string}`),
-  transport: http(envConfig.BSC_RPC_HTTP!)
+  transport: getRpc(bscChain.id)
 });
