@@ -1,4 +1,4 @@
-import { createPublicClient, createWalletClient } from "viem";
+import { createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { createSmartPublicClient } from "@/clients/factory/smartClient";
 import { envConfig } from "@/core/env";
