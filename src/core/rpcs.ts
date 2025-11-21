@@ -4,9 +4,20 @@ export const LENS_MAINNET_RPCS = [
   "https://lens-mainnet.g.alchemy.com/v2/N_HuqeYE3mr_enxw-BGFI2rOm1U7bhGy"
 ];
 
+export const LENS_MAINNET_WS = [
+  "wss://lens-mainnet.g.alchemy.com/v2/N_HuqeYE3mr_enxw-BGFI2rOm1U7bhGy",
+  "wss://api.lens.matterhosted.dev/ws/v1/1",
+  "wss://rpc.lens.xyz/ws/v1/1"
+];
+
 export const LENS_TESTNET_RPCS = [
   "https://rpc.testnet.lens.dev",
   "https://lens-sepolia.g.alchemy.com/v2/N_HuqeYE3mr_enxw-BGFI2rOm1U7bhGy"
+];
+
+export const LENS_TESTNET_WS = [
+  "wss://lens-sepolia.g.alchemy.com/v2/N_HuqeYE3mr_enxw-BGFI2rOm1U7bhGy",
+  "wss://rpc.testnet.lens.dev/ws/v1/1"
 ];
 
 export const BSC_TESTNET_RPCS = [
@@ -22,8 +33,7 @@ export const BSC_TESTNET_RPCS = [
 
 export const BSC_TESTNET_WS = [
   "wss://bsc-testnet-rpc.publicnode.com",
-  "wss://bnb-chain-testnet.drpc.org",
-  "wss://testnet-dex-atlantic-v2.binance.org"
+  "wss://bsc-testnet.drpc.org"
 ]
 
 export const BSC_MAINNET_RPCS = [
@@ -35,12 +45,20 @@ export const BSC_MAINNET_RPCS = [
   "https://bsc-rpc.publicnode.com",
   "https://bsc.drpc.org",
   "https://binance.llamarpc.com",
+  "https://bsc-dataseed.defibit.io",
   "https://bsc-dataseed1.defibit.io",
-  "https://bsc-dataseed.nariox.org"
+  "https://bsc-dataseed2.defibit.io",
+  "https://bsc-dataseed3.defibit.io",
+  "https://bsc-dataseed4.defibit.io",
+  "https://bsc-dataseed.nariox.org",
+  "https://bsc-dataseed1.nariox.org",
+  "https://bsc-dataseed2.nariox.org",
+  "https://bsc-dataseed3.nariox.org",
+  "https://bsc-dataseed4.nariox.org",
 ];
 
 export const BSC_MAINNET_WS = [
   "wss://bsc-rpc.publicnode.com",
-  "wss://bnb-chain-mainnet.drpc.org",
-  "wss://bsc.api.onfinality.io/public-ws"
+  "wss://bsc.drpc.org",
+  "wss://binance.llamarpc.com"
 ]
