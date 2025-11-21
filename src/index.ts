@@ -37,7 +37,10 @@ const startServer = async () => {
   app.use(logger())
   app.use(prettyJSON())
 
-  app.get('/', (c) => c.json({ message: 'Slice Bridge Relayer is running' }))
+  app.get('/', (c) => c.json({
+    message: 'Slice Bridge Relayer is running',
+    network: process.env.NODE_ENV === 'development' ? 'testnet' : 'mainnet'
+  }))
   app.route('/api', apiRoutes)
 
   const port = Number(process.env.PORT ?? 8787)

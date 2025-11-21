@@ -4,8 +4,6 @@ services:
     image: redis:7-alpine
     container_name: slice-bridge-redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy noeviction
@@ -17,23 +15,25 @@ services:
     networks:
       - slice-bridge-network
 
-  # Main application
+  # Bridge Service cho MAINNET
   app:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: application
     container_name: slice-bridge-app
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 8787
+      LOG_LEVEL: ${LOG_LEVEL:-info}
       REDIS_URL: redis://redis:6379
       USE_REDIS: "true"
       QUEUE_PREFIX: slice-bridge
       
       # Database configuration (use your external DB or uncomment postgres service above)
       DATABASE_URL: ${DATABASE_URL}
+      DB_SCHEMA: ${DB_SCHEMA:-bridge_db}
       
       # Blockchain configuration
       LENS_START_BLOCK: ${LENS_START_BLOCK:-5000000}
