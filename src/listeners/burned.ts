@@ -30,7 +30,7 @@ export async function burnedListener() {
     toBlock: latest > 0n ? latest - 1n : 0n,
     window: 20_000,
     onLogs: async (logs) => {
-      logger.info(`LENS Public Client Transport Structure: ${lensPublicClient.transport}`)
+      logger.info({ transport: lensPublicClient.transport }, 'LENS Public Client Transport Structure:')
       for (const l of logs) {
         await handleBurnedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
@@ -45,7 +45,7 @@ export async function burnedListener() {
     fromBlock: latest, // từ block mới nhất
     onLogs: async (logs) => {
       const tip = await lensPublicClient.getBlockNumber();
-      logger.info(`LENS Public Client Transport Structure: ${lensPublicClient.transport}`)
+      logger.info({ transport: lensPublicClient.transport }, 'LENS Public Client Transport Structure:')
       for (const l of logs) {
         await handleBurnedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));

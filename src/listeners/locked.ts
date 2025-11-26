@@ -31,7 +31,7 @@ export async function lockedListener() {
     toBlock: latest > 0n ? latest - 1n : 0n,
     window: 10_000,
     onLogs: async (logs) => {
-      logger.info(`BSC Public Client Transport Structure: ${bscPublicClient.transport}`)
+      logger.info({ transport: bscPublicClient.transport }, 'BSC Public Client Transport Structure:')
       for (const l of logs) {
         await handleLockedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
@@ -46,7 +46,7 @@ export async function lockedListener() {
     fromBlock: latest, // từ block mới nhất
     onLogs: async (logs) => {
       const tip = await bscPublicClient.getBlockNumber();
-      logger.info(`BSC Public Client Transport Structure: ${bscPublicClient.transport}`)
+      logger.info({ transport: bscPublicClient.transport }, 'BSC Public Client Transport Structure:')
       for (const l of logs) {
         await handleLockedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
