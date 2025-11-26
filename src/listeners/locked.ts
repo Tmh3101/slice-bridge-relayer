@@ -10,6 +10,7 @@ import { getCheckpoint, setCheckpoint } from "@/lib/helpers/checkpoint";
 import { backfillInWindows } from "@/lib/helpers/backfill";
 import { existedBridgeChecking } from "@/lib/helpers/existedBridgeChecking";
 import bridgeQueue from '@/queues'
+import { log } from "console";
 
 export async function lockedListener() {
   const key = CheckpointKey.BSC_LOCKED;
@@ -30,6 +31,7 @@ export async function lockedListener() {
     toBlock: latest > 0n ? latest - 1n : 0n,
     window: 10_000,
     onLogs: async (logs) => {
+      logger.info(`BSC Public Client Transport Structure: ${bscPublicClient.transport}`)
       for (const l of logs) {
         await handleLockedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
@@ -44,6 +46,7 @@ export async function lockedListener() {
     fromBlock: latest, // từ block mới nhất
     onLogs: async (logs) => {
       const tip = await bscPublicClient.getBlockNumber();
+      logger.info(`BSC Public Client Transport Structure: ${bscPublicClient.transport}`)
       for (const l of logs) {
         await handleLockedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
@@ -51,7 +54,7 @@ export async function lockedListener() {
     },
     onError: (err) => {
       if (err?.message?.includes("Missing or invalid parameters")) {
-        logger.warn({ detail: err.cause }, "[locked-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
+        logger.warn("[locked-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
         return;
       }
       logger.error({ detail: err.message }, "[locked-listener] error");
@@ -88,7 +91,12 @@ async function handleLockedLog(l: any) {
       status: BridgeJobStatus.PENDING,
     }).returning();
 
-    logger.info(`[locked-listener] locked event detected - from: ${from}, toOnLens: ${toOnLens}, amount: ${amount}, srcTxHash: ${srcTxHash}`);
+    logger.info({
+      from,
+      toOnLens,
+      amount: amount.toString(),
+      srcTxHash
+    }, '[locked-listener] locked event detected');
     await bridgeQueue.enqueue('locked', job);
   }
 }

@@ -6,20 +6,31 @@ import {
 import getRpc from "@/lib/helpers/getRpc";
 import getWs from "@/lib/helpers/getWs";
 
-const DEFAULT_POLLING_INTERVAL_MS = 5_000;
+const DEFAULT_POLLING_INTERVAL_MS = 3_000;
 
 /** Public client: tự fallback WS→HTTP */
-export function createSmartPublicClient(chain: Chain): PublicClient {
-    try {
-      return createPublicClient({
-        chain,
-        transport: getWs(chain.id),
-      });
-    } catch {}
+// export function createSmartPublicClient(chain: Chain): PublicClient {
+//     try {
+//       return createPublicClient({
+//         chain,
+//         transport: getWs(chain.id),
+//       });
+//     } catch {}
 
+//   return createPublicClient({
+//     chain,
+//     transport: getRpc(chain.id),
+//     pollingInterval: DEFAULT_POLLING_INTERVAL_MS,
+//   });
+// }
+
+export function createSmartPublicClient(chain: Chain): PublicClient {
   return createPublicClient({
     chain,
-    transport: getRpc(chain.id),
-    pollingInterval: DEFAULT_POLLING_INTERVAL_MS,
+    transport: getRpc(chain.id), // Chỉ dùng HTTP
+    pollingInterval: DEFAULT_POLLING_INTERVAL_MS, 
+    batch: {
+      multicall: true,
+    }
   });
 }

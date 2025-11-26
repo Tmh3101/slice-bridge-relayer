@@ -28,7 +28,11 @@ const getRpcsByChainId = (chainId: number): string[] => {
 const getRpc = (chainId: number): FallbackTransport => {
   const rpcs = getRpcsByChainId(chainId);
   return fallback(
-    rpcs.map((rpc) => http(rpc, { batch: { batchSize: BATCH_SIZE } }))
+    rpcs.map((rpc) => http(rpc, { batch: { batchSize: BATCH_SIZE } })),
+    {
+      rank: true,
+      retryCount: 3
+    }
   );
 };
 

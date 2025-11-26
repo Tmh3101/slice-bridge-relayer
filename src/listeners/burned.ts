@@ -30,6 +30,7 @@ export async function burnedListener() {
     toBlock: latest > 0n ? latest - 1n : 0n,
     window: 20_000,
     onLogs: async (logs) => {
+      logger.info(`LENS Public Client Transport Structure: ${lensPublicClient.transport}`)
       for (const l of logs) {
         await handleBurnedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
@@ -44,6 +45,7 @@ export async function burnedListener() {
     fromBlock: latest, // từ block mới nhất
     onLogs: async (logs) => {
       const tip = await lensPublicClient.getBlockNumber();
+      logger.info(`LENS Public Client Transport Structure: ${lensPublicClient.transport}`)
       for (const l of logs) {
         await handleBurnedLog(l);
         await setCheckpoint(key, Number(l.blockNumber!));
@@ -51,7 +53,7 @@ export async function burnedListener() {
     },
     onError: (err) => {
       if (err?.message?.includes("Invalid parameters were provided to the RPC method")) {
-        logger.warn({ detail: err.cause }, "[burned-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
+        logger.warn("[burned-listener] watchContractEvent stopped due to missing parameters, restarting listener...");
         return;
       }
       logger.error({ detail: err.message }, "[burned-listener] error");
@@ -86,7 +88,12 @@ async function handleBurnedLog(l: any) {
       status: BridgeJobStatus.PENDING,
     }).returning();
 
-    logger.info(`[burned-listener] burned event detected - from: ${from}, toOnBsc: ${toOnBsc}, amount: ${amount}, srcTxHash: ${srcTxHash}`);
+    logger.info({
+      from,
+      toOnBsc,
+      amount: amount.toString(),
+      srcTxHash
+    }, '[burned-listener] burned event detected');
     await bridgeQueue.enqueue('burned', job);
   }
 }

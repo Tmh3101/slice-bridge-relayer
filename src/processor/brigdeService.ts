@@ -16,7 +16,11 @@ import {
 
 export const mintOnLens = async (job: BridgeJob) => {
     try {
-        logger.info(`[mintOnLens-service] Minting ${job.amount} to ${job.to} for job ID ${job.id}`);
+        logger.info({
+            jobId: job.id,
+            to: job.to,
+            amount: job.amount
+        }, `[mintOnLens-service] Minting for job ID ${job.id}`);
         const data = encodeFunctionData({
             abi: BRIDGE_MINTER_LENS_ABI,
             functionName: "mintTo",
@@ -48,7 +52,10 @@ export const mintOnLens = async (job: BridgeJob) => {
             status: BridgeJobStatus.COMPLETED,
         }).where(eq(bridgeJobs.id, job.id)).returning();
 
-        logger.info(`[mintOnLens-service] Minting completed for job ID ${updatedJob.id} - status: ${updatedJob.status}`);
+        logger.info({
+            jobId: updatedJob.id,
+            status: updatedJob.status
+        }, '[mintOnLens-service] Minting completed');
     } catch (e: any) {
         logger.error("[mintOnLens-service] error:" + e?.message || e);
         await db.update(bridgeJobs).set({
@@ -65,7 +72,11 @@ export const mintOnLens = async (job: BridgeJob) => {
 
 export const unlockOnBsc = async (job: BridgeJob) => {
     try {
-        logger.info(`[unlockOnBsc-service] Unlocking ${job.amount} to ${job.to} for job ID ${job.id}`);
+        logger.info({
+            jobId: job.id,
+            to: job.to,
+            amount: job.amount
+        }, `[unlockOnBsc-service] Unlocking for job ID ${job.id}`);
         const data = encodeFunctionData({
             abi: BRIDGE_GATEWAY_BSC_ABI as any,
             functionName: "unlock",
@@ -97,7 +108,10 @@ export const unlockOnBsc = async (job: BridgeJob) => {
             status: BridgeJobStatus.COMPLETED,
         }).where(eq(bridgeJobs.id, job.id)).returning();
         
-        logger.info(`[unlockOnBsc-service] Unlocking completed for job ID ${updatedJob.id} - status: ${updatedJob.status}`);
+        logger.info({
+            jobId: updatedJob.id,
+            status: updatedJob.status
+        }, `[unlockOnBsc-service] Unlocking completed for job ID ${updatedJob.id}`);
     } catch (e: any) {
         logger.error("[unlockOnBsc-service] error:" + e?.message || e);
         await db.update(bridgeJobs).set({
