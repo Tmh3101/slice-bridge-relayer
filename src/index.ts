@@ -8,6 +8,7 @@ import { logger as custormLogger } from "@/core/logger";
 import { lockedListenWorker, burnedListenWorker } from './workers'
 import apiRoutes from './api/server'
 import { client, checkConnection } from '@/db'
+import { startKeepAlive } from '@/keepAlive'
 
 const startServer = async () => {
   // check database connection on startup
@@ -47,6 +48,10 @@ const startServer = async () => {
   serve({ fetch: app.fetch, port }, (info) => {
     custormLogger.info(`Local server listening: http://localhost:${info.port}`)
   })
+
+  // Reciprocal keep-alive: ping the peer service so BOTH Render Free
+  // services receive traffic and never hit the 15-min spin-down.
+  startKeepAlive()
 }
 
 startServer();
